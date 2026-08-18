@@ -34,7 +34,6 @@ STATE_FILE = "last_values.json"
 
 session = requests.Session()
 session.headers.update({
-    "Content-Type": "application/json",
     "User-Agent": "CRSH-Watcher/1.0",
 })
 
@@ -51,11 +50,11 @@ def send_telegram(message: str):
     try:
         r = session.post(
             f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
-            data={"chat_id": TELEGRAM_CHAT_ID, "text": message},
+            json={"chat_id": TELEGRAM_CHAT_ID, "text": message},
             timeout=10,
         )
         if not r.ok:
-            print(f"[{now()}] Telegram error: {r.status_code}")
+            print(f"[{now()}] Telegram error: {r.status_code} {r.text}")
     except Exception as e:
         print(f"[{now()}] Telegram error: {e}")
 
